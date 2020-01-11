@@ -1,0 +1,164 @@
+Aim : Draw  a line using DDA and Bresenham Algorithm
+
+Code :    
+#include<graphics.h>
+#include<bits/stdc++.h>
+using namespace std;
+
+#define callInitgraph int gd=DETECT,gm; initgraph(&gd,&gm,NULL);
+
+
+class LineDrawingAlgorithms
+{
+public :
+    int X1,Y1,X2,Y2;
+    void getCoordinates();
+    /*line alignment on the terminal screen is exact mirror image of our regular co-ordinate axes,hence we are taking the absolute values of dx and dy in calculation of DDALine and Bresenham Algorithm;*/
+
+    void DDALine();
+    void bresenhamLine();
+};
+
+void LineDrawingAlgorithms::bresenhamLine()
+{
+    callInitgraph;
+
+    float xin, yin, dx, dy, step, x, y, pk;
+    dx = X2 - X1;
+    dy = Y2 - Y1;
+
+    x = X1;
+    y = Y1;
+
+    //this is the case when slope(m) < 1
+    if(abs(dx) > abs(dy))
+    {
+        putpixel(x,y,5);
+        pk = (2 * abs(dy)) - abs(dx);
+
+        for(int i = 0; i < abs(dx) ; i++)
+        {
+            x = x + 1;
+            if(pk < 0)
+                pk = pk + (2 * abs(dy));
+            else
+            {
+                y = y + 1;
+                pk = pk + (2 * abs(dy)) - (2 * abs(dx));
+
+            }
+
+            putpixel(x,y,5);
+            delay(10);
+        }
+
+        delay(30);
+
+    }
+    else
+    {
+        //when slope is greater than 1
+        putpixel(x,y,5);
+        pk = (2 * abs(dx)) - abs(dy);
+
+        for(int i = 0; i < abs(dy) ; i++)
+        {
+            y = y + 1;
+            if(pk < 0)
+                pk = pk + (2 * abs(dx));
+            else
+            {
+                x = x + 1;
+                pk = pk + (2 * abs(dx)) - (2 *abs(dy));
+
+            }
+
+            putpixel(x,y,5);
+            delay(10);
+        }
+
+        delay(30);
+    }
+
+}
+
+void LineDrawingAlgorithms::DDALine()
+{
+
+    callInitgraph;
+    float xin, yin, dx, dy, step, x, y, pk;
+    dx = X2 - X1;
+    dy = Y2 - Y1;
+
+    if(abs(dx) > abs(dy))
+        step = abs(dx);
+    else
+        step = abs(dy);
+
+    xin = (dx) / step;
+    yin = (dy) / step;
+
+    x = X1;
+    y = Y1;
+    putpixel((x), (y),GREEN);
+    for(int i = 1; i <= step; ++i)
+    {
+        x = x + xin;
+        y = y + yin;
+
+        putpixel(round(x), round(y),GREEN);
+
+    }
+
+    delay(1000);
+
+}
+
+void LineDrawingAlgorithms::getCoordinates()
+{
+    cout << "\nEnter the First Point Co-ordinates : " << endl;
+    cin >> X1 >> Y1;
+    cout << "\nEnter the Second Point Co-ordinates : "<< endl;
+    cin >> X2 >> Y2;
+}
+
+int main()
+{
+
+    LineDrawingAlgorithms l1;
+    int n,c;
+
+    do
+    {
+        c = 1;
+        cout << "\n(1). Enter Co-ordinates";
+        cout << "\n(2). DDALine";
+        cout << "\n(3). BRESENHAM";
+        cout << "\n(4). To Exit";
+        cin>>n;
+
+        switch(n)
+        {
+            case 1:
+                l1.getCoordinates();
+                break;
+
+            case 2:
+                l1.DDALine();
+                closegraph();
+                break;
+
+            case 3:
+                l1.bresenhamLine();
+                closegraph();
+                break;
+
+            case 4:
+                c = 0;
+                break;
+        }
+
+    }while(c);
+
+    return 0;
+}
